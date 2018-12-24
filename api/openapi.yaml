@@ -1,0 +1,47 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: contact@cloudflavor.io
+    name: Cloudflavor Org
+    url: https://victor.cloudflavor.io
+  description: This is the API for Optimus, the kubernetes native CI/CD platform.
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: Optimus CI/CD platform API
+  version: 0.0.1
+servers:
+- url: '{scheme}://{environment}.{fqdn}:{port}/{basePath}'
+  variables:
+    fqdn:
+      default: optimus.cloudflavor.io
+      enum:
+      - optimus.cloudflavor.io
+      - localhost
+      - 0.0.0.0
+      - 127.0.0.1
+    environment:
+      default: api
+      enum:
+      - api
+      - dev-api
+      - stg-api
+    port:
+      default: "8443"
+      enum:
+      - "8443"
+      - "443"
+    basePath:
+      default: v1alpha1
+    scheme:
+      default: https
+      enum:
+      - http
+      - htttps
+paths:
+  /:
+    get:
+      responses:
+        200:
+          description: 200 response.
+      summary: Lists the current available API versions.
