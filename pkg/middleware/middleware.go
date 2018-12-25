@@ -8,8 +8,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type WrapperFunc func(http.HandlerFunc) http.HandlerFunc
-
 func Logging(next http.HandlerFunc, path string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
