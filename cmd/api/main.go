@@ -18,23 +18,24 @@ func main() {
 	logrus.SetFormatter(
 		&logrus.JSONFormatter{},
 	)
-	certFile := os.Getenv("CERT_PATH")
-	keyFile := os.Getenv("KEY_PATH")
-	bindHost := os.Getenv("BIND_HOST")
+	certFile := os.Getenv("OPTIMUS_SSL_CERT_PATH")
+	keyFile := os.Getenv("OPTIMUS_SSL_CERT_KEY_PATH")
+	bindHost := os.Getenv("OPTIMUS_BIND_HOST")
 	if bindHost == "" {
 		bindHost = ":8000"
 	}
 
 	router := mux.NewRouter().StrictSlash(true)
-	validContentTypes := []string{"content-type: application/json"}
+	validContentTypes := "application/json"
 
 	for _, route := range v1alpha1.Routes {
-		var handler http.HandlerFunc
-		// TODO: write an aggregator with a proper type to avoid doing this manually
-		handler = middleware.Logging(route.Handler, route.Pattern)
-		handler = middleware.ValidateContentType(route.Handler, validContentTypes)
-		handler = middleware.ValidateMethod(route.Handler, route.Method)
-
+		handler := middleware.WrapFunctionality(
+			route.Handler,
+			middleware.Logging(route.Pattern),
+			middleware.WrapContentType(validContentTypes),
+			middleware.ValidateMethod(route.Method),
+			middleware.ValidateContentType(validContentTypes),
+		)
 		router.
 			Methods(route.Method).
 			Path(route.Pattern).

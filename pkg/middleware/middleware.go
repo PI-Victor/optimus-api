@@ -8,53 +8,81 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type WrapperFunc func(http.HandlerFunc) http.HandlerFunc
+type funcWrapper func(http.HandlerFunc) http.HandlerFunc
 
-func Logging(next http.HandlerFunc, path string) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
+func Logging(path string) funcWrapper {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			start := time.Now()
 
-		defer func() {
-			logrus.WithFields(
-				logrus.Fields{
-					// TODO: find relevant information to be displayed in the logger.
-					"path":   path,
-					"URI":    r.RequestURI,
-					"method": r.Method,
-				},
-			).Infof("Duration: %d", time.Since(start))
-		}()
+			defer func() {
+				logrus.WithFields(
+					logrus.Fields{
+						"path":   path,
+						"URI":    r.RequestURI,
+						"Method": r.Method,
+					},
+				).Infof("Duration: %d", time.Since(start))
+			}()
 
-		next.ServeHTTP(w, r)
-	})
+			next(w, r)
+		}
+	}
 }
 
-func ValidateMethod(next http.HandlerFunc, method string) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == method {
-			next.ServeHTTP(w, r)
-			return
-		}
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	})
-}
-
-func ValidateContentType(next http.HandlerFunc, contentTypes []string) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !(r.Method != "POST" || r.Method == "PUT" || r.Method == "PATCH") {
-			next.ServeHTTP(w, r)
-			return
-		}
-		for _, contentType := range contentTypes {
-			if isValidContentType(contentType) {
-				next.ServeHTTP(w, r)
+func ValidateMethod(method string) funcWrapper {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == method {
+				next(w, r)
 				return
 			}
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		}
-		http.Error(w, fmt.Sprintf("Unsupported content type %q; expected one of %q", r.Header.Get("Content-Type"), contentTypes), http.StatusUnsupportedMediaType)
-	})
+	}
 }
 
-func isValidContentType(contentType string) bool {
-	return true
+func ValidateContentType(contentTypes ...string) funcWrapper {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			if !(r.Method != "POST" || r.Method == "PUT" || r.Method == "PATCH") {
+				next(w, r)
+				return
+			}
+			for _, contentType := range contentTypes {
+				if isValidContentType(r.Header.Get("Content-Type"), contentType) {
+					next(w, r)
+					return
+				}
+			}
+			http.Error(w, fmt.Sprintf("Unsupported content type %q; expected one of %q", r.Header.Get("Content-Type"), contentTypes), http.StatusUnsupportedMediaType)
+		}
+	}
+}
+
+func WrapContentType(contentType string) funcWrapper {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", contentType)
+			next(w, r)
+		}
+	}
+}
+
+func isValidContentType(currentContentType string, contentTypes ...string) bool {
+	for _, contentType := range contentTypes {
+		if currentContentType == contentType {
+			return true
+		}
+		continue
+	}
+	return false
+}
+
+// WrapFunctionality will add all the necessary middleware to the route's handler.
+func WrapFunctionality(handlerFunc http.HandlerFunc, wrappers ...funcWrapper) http.HandlerFunc {
+	for _, wrapper := range wrappers {
+		handlerFunc = wrapper(handlerFunc)
+	}
+	return handlerFunc
 }
