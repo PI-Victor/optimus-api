@@ -5,8 +5,6 @@ import (
 	"net/http"
 )
 
-type handlerWrapper func(http.HandlerFunc) http.HandlerFunc
-
 // Route holds the mappings for an API route.
 type Route struct {
 	Name    string
