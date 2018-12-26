@@ -1,15 +1,17 @@
 package main
 
 import (
-	//	"encoding/json"
+	"context"
 	"net/http"
 	"os"
+	"os/signal"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 
 	v1alpha1 "github.com/cloudflavor/optimus-api/pkg/apis/v1alpha1"
+	"github.com/cloudflavor/optimus-api/pkg/database"
 	"github.com/cloudflavor/optimus-api/pkg/middleware"
 )
 
@@ -57,9 +59,37 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	logrus.Infof("Starting server on %s", bindHost)
-	logrus.Fatalf(
-		"Server exited: %s",
-		httpServer.ListenAndServeTLS(certFile, keyFile),
-	)
+	type optimus struct {
+		database   *database.Database
+		httpServer *http.Server
+	}
+
+	newApp := optimus{
+		httpServer: httpServer,
+	}
+
+	go func() {
+		logrus.Infof("Starting server on %s", bindHost)
+		newApp.httpServer.ListenAndServeTLS(certFile, keyFile)
+	}()
+	c := make(chan os.Signal, 1)
+
+	signal.Notify(c, os.Interrupt)
+
+	// Block until we receive our signal.
+	<-c
+	// NOTE: is this ok, should it be more or less?
+	wait := time.Second * 3
+	// Create a deadline to wait for.
+	ctx, cancel := context.WithTimeout(context.Background(), wait)
+	defer cancel()
+	// Doesn't block if no connections, but will otherwise wait
+	// until the timeout deadline.
+	go func() {
+		newApp.httpServer.Shutdown(ctx)
+	}()
+
+	<-ctx.Done()
+	logrus.Info("Shutting down server")
+	os.Exit(0)
 }
