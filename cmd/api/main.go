@@ -40,7 +40,13 @@ func main() {
 			Path(route.Pattern).
 			Name(route.Name).
 			Handler(handler)
-		logrus.Debugf("registered route: %#v", route)
+
+		logrus.WithFields(
+			logrus.Fields{
+				"path": route.Pattern,
+				"name": route.Name,
+			},
+		).Debug("registered route")
 	}
 
 	httpServer := &http.Server{
