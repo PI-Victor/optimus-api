@@ -19,7 +19,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 func createUser(w http.ResponseWriter, r *http.Request) {
 	httpResponseCode := http.StatusOK
-
 	user := &User{}
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -60,5 +59,9 @@ func getJobByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func callGitHubWebHook(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+func getMetricsByType(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }

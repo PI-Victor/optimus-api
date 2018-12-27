@@ -63,4 +63,10 @@ var Routes = []Route{
 		Method:  http.MethodPost,
 		Handler: callGitHubWebHook,
 	},
+	{
+		Name:    "metrics",
+		Pattern: fmt.Sprintf("/%s/%s/{type}", APIVersion, "metrics"),
+		Method:  http.MethodGet,
+		Handler: getMetricsByType,
+	},
 }

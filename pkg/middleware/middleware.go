@@ -8,6 +8,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// Middleware convenience struct that aids middleware wrapping.
+type Middleware struct {
+	http.Handler
+}
+
 type funcWrapper func(http.HandlerFunc) http.HandlerFunc
 
 func Logging(path string) funcWrapper {
@@ -45,7 +50,7 @@ func ValidateMethod(method string) funcWrapper {
 func ValidateContentType(contentTypes ...string) funcWrapper {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			if !(r.Method != "POST" || r.Method == "PUT" || r.Method == "PATCH") {
+			if !(r.Method == "POST" || r.Method == "PUT" || r.Method == "PATCH") {
 				next(w, r)
 				return
 			}
