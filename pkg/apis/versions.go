@@ -2,11 +2,11 @@ package apis
 
 // APIVersions is a public varbiable that holds all the available API versions in the application.
 type APIVersion struct {
-	Pattern string `json:"pattern"`
+	Version string `json:"version"`
 }
 
 var APIVersions = []APIVersion{
 	{
-		Pattern: "v1alpha1",
+		Version: "v1alpha1",
 	},
 }

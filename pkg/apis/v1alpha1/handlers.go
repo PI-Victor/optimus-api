@@ -18,24 +18,24 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {
-	httpResponseCode := http.StatusOK
 	user := &User{}
 	b, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+
 	if err != nil {
-		logrus.Errorf("Couldn't parse request body: %s", err)
+		logrus.Errorf("could not parse request body: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	err = json.Unmarshal(b, user)
 	if err != nil {
-		logrus.Errorf("Couldn't unmarshall request body: %s", err)
-		httpResponseCode = http.StatusInternalServerError
-		w.WriteHeader(httpResponseCode)
+		logrus.Errorf("could not unmarshall request body: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(httpResponseCode)
+	w.WriteHeader(http.StatusOK)
 }
 
 func findUserByID(w http.ResponseWriter, r *http.Request) {
