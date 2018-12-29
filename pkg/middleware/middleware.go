@@ -15,7 +15,7 @@ type wrappedRW struct {
 }
 
 // WriteHeader helps hijack the current http status code so that
-// we can use for logging.
+// we can use it for logging.
 func (h *wrappedRW) WriteHeader(code int) {
 	h.httpResponseStatus = code
 	h.ResponseWriter.WriteHeader(code)
