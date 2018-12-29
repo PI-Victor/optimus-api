@@ -1,3 +1,3 @@
 test:
-	@go test -v ./pkg/middleware
+	@go test -v -race -coverprofile=profile.out -covermode=atomic ./pkg/middleware
 	

@@ -26,7 +26,7 @@ func NewMiddleware() *Middleware {
 	return &Middleware{}
 }
 
-// Middleware is a conveniece struct to converge all middleware
+// Middleware is a convenience struct to converge all middleware
 // functionality.
 type Middleware struct{}
 

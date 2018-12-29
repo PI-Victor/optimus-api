@@ -24,3 +24,4 @@ _testmain.go
 *.prof
 key.pem
 certificate.pem
+profile.out
