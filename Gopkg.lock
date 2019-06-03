@@ -7,23 +7,15 @@
   name = "github.com/gopherjs/gopherjs"
   packages = ["js"]
   pruneopts = "UT"
-  revision = "d547d1d9531ed93dbdebcbff7f83e7c876a1e0ee"
+  revision = "3e4dfb77656c424b6d1196a4d5fed0fcf63677cc"
 
 [[projects]]
-  digest = "1:c79fb010be38a59d657c48c6ba1d003a8aa651fa56b579d959d74573b7dff8e1"
-  name = "github.com/gorilla/context"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
-  version = "v1.1.1"
-
-[[projects]]
-  digest = "1:e73f5b0152105f18bc131fba127d9949305c8693f8a762588a82a48f61756f5f"
+  digest = "1:3af6be4fee7c08f81f13d36f04ffb63ad4b6b5aaba12cce96095c7c2863d4912"
   name = "github.com/gorilla/mux"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e3702bed27f0d39777b0b37b664b6280e8ef8fbf"
-  version = "v1.6.2"
+  revision = "ed099d42384823742bba0bf9a72b53b55c9e2e38"
+  version = "v1.7.2"
 
 [[projects]]
   digest = "1:4b63210654b1f2b664f74ec434a1bb1cb442b3d75742cc064a10808d1cca6361"
@@ -34,32 +26,33 @@
   version = "v4.20"
 
 [[projects]]
-  digest = "1:0a69a1c0db3591fcefb47f115b224592c8dfa4368b7ba9fae509d5e16cdc95c8"
+  digest = "1:31e761d97c76151dde79e9d28964a812c46efc5baee4085b86f68f0c654450de"
   name = "github.com/konsorten/go-windows-terminal-sequences"
   packages = ["."]
   pruneopts = "UT"
-  revision = "5c8c8bd35d3832f5d134ae1e1e375b69a4d25242"
-  version = "v1.0.1"
+  revision = "f55edac94c9bbba5d6182a4be46d86a2c9b5b50e"
+  version = "v1.0.2"
 
 [[projects]]
-  digest = "1:69b1cc331fca23d702bd72f860c6a647afd0aa9fcbc1d0659b1365e26546dd70"
+  digest = "1:04457f9f6f3ffc5fea48e71d62f2ca256637dee0a04d710288e27e05c8b41976"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   pruneopts = "UT"
-  revision = "bcd833dfe83d3cebad139e4a29ed79cb2318bf95"
-  version = "v1.2.0"
+  revision = "839c75faf7f98a33d445d181f3018b5c3409a45e"
+  version = "v1.4.2"
 
 [[projects]]
-  digest = "1:cc1c574c9cb5e99b123888c12b828e2d19224ab6c2244bda34647f230bf33243"
+  digest = "1:237af0cf68bac89e21af72e6cd6b64f388854895e75f82ad08c6c011e1a8286c"
   name = "github.com/smartystreets/assertions"
   packages = [
     ".",
+    "internal/go-diff/diffmatchpatch",
     "internal/go-render/render",
     "internal/oglematchers",
   ]
   pruneopts = "UT"
-  revision = "7678a5452ebea5b7090a6b163f844c133f523da2"
-  version = "1.8.3"
+  revision = "f487f9de1cd36ebab28235b9373028812fb47cbd"
+  version = "1.10.1"
 
 [[projects]]
   digest = "1:a3e081e593ee8e3b0a9af6a5dcac964c67a40c4f2034b5345b2ad78d05920728"
@@ -75,22 +68,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:38f553aff0273ad6f367cb0a0f8b6eecbaef8dc6cb8b50e57b6a81c1d5b1e332"
-  name = "golang.org/x/crypto"
-  packages = ["ssh/terminal"]
-  pruneopts = "UT"
-  revision = "505ab145d0a99da450461ae2c1a9f6cd10d1f447"
-
-[[projects]]
-  branch = "master"
-  digest = "1:3d5e79e10549fd9119cbefd614b6d351ef5bd0be2f2b103a4199788e784cbc68"
+  digest = "1:8f5108406bc43c7669b0d67d282e40d05c9f268615fcaf8c1f0f76965aa3f09f"
   name = "golang.org/x/sys"
-  packages = [
-    "unix",
-    "windows",
-  ]
+  packages = ["unix"]
   pruneopts = "UT"
-  revision = "b4a75ba826a64a70990f11a225237acd6ef35c9f"
+  revision = "4c4f7f33c9ed00de01c4c741d2177abfcfe19307"
 
 [solve-meta]
   analyzer-name = "dep"
