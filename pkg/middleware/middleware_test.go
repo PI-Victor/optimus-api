@@ -18,12 +18,11 @@ func newRouter() *mux.Router {
 	newRouter := mux.NewRouter().
 		StrictSlash(true)
 
-	newRouter.
-		Use(
-			newMiddleWare.Logging,
-			newMiddleWare.ValidateContentType,
-			newMiddleWare.WrapContentType,
-		)
+	newRouter.Use(
+		newMiddleWare.Logging,
+		newMiddleWare.ValidateContentType,
+		newMiddleWare.WrapContentType,
+	)
 
 	for _, route := range v1alpha1.Routes {
 		newRouter.
