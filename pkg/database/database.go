@@ -1,20 +1,17 @@
 package database
 
 import (
+	"github.com/sirupsen/logrus"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type Database struct {
-	client *gorm.DB
-}
-
-func NewDbConnection(dbUri string) (*Database, error) {
-	c, err := gorm.Open("postgres")
+func NewDbConnection(dbUri string) (*gorm.DB, error) {
+	c, err := gorm.Open("postgres", dbUri)
 	if err != nil {
 		return nil, err
 	}
-	return &Database{
-		client: c,
-	}, nil
+	logrus.Info("Successfully connected to the database!")
+	return c, nil
 }

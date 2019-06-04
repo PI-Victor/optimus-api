@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
 
 	v1alpha1 "github.com/cloudflavor/optimus-api/pkg/apis/v1alpha1"
@@ -34,7 +35,12 @@ func main() {
 	certFile := os.Getenv("OPTIMUS_SSL_CERT_PATH")
 	keyFile := os.Getenv("OPTIMUS_SSL_CERT_KEY_PATH")
 	bindHost := os.Getenv("OPTIMUS_BIND_HOST")
+
 	dbURI := os.Getenv("OPTIMUS_DB_URI")
+	if dbURI == "" {
+		logrus.Fatalf("Database connection string not set")
+	}
+
 	if bindHost == "" {
 		bindHost = ":8000"
 	}
@@ -63,14 +69,15 @@ func main() {
 	}
 
 	type optimus struct {
-		database   *database.Database
+		database   *gorm.DB
 		httpServer *http.Server
 	}
 	dbClient, err := database.NewDbConnection(dbURI)
 	// TODO: make the API wait for the DB connection and not fail.
 	if err != nil {
-		logrus.Fatalf("An error occured while connecting to the database")
+		logrus.Fatalf("An error occured while connecting to the database: %s", err)
 	}
+
 	newApp := optimus{
 		database: dbClient,
 		httpServer: &http.Server{
