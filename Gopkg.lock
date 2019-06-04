@@ -18,6 +18,22 @@
   version = "v1.7.2"
 
 [[projects]]
+  digest = "1:0a00b2537beacde5f2f5ebec11684f8e98fb23c2ed798a948461d82356dc7491"
+  name = "github.com/jinzhu/gorm"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "b7156195f7f3415f97c20abbd6aff894b847fee8"
+  version = "v1.9.8"
+
+[[projects]]
+  branch = "master"
+  digest = "1:01ed62f8f4f574d8aff1d88caee113700a2b44c42351943fa73cc1808f736a50"
+  name = "github.com/jinzhu/inflection"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "f5c5f50e6090ae76a29240b61ae2a90dd810112e"
+
+[[projects]]
   digest = "1:4b63210654b1f2b664f74ec434a1bb1cb442b3d75742cc064a10808d1cca6361"
   name = "github.com/jtolds/gls"
   packages = ["."]
@@ -79,6 +95,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/gorilla/mux",
+    "github.com/jinzhu/gorm",
     "github.com/sirupsen/logrus",
     "github.com/smartystreets/goconvey/convey",
   ]
