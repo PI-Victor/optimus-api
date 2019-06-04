@@ -4,6 +4,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type Projects struct {
+type Project struct {
 	gorm.Model
+	User      User
+	Namespace string
 }

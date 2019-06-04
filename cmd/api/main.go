@@ -34,6 +34,7 @@ func main() {
 	certFile := os.Getenv("OPTIMUS_SSL_CERT_PATH")
 	keyFile := os.Getenv("OPTIMUS_SSL_CERT_KEY_PATH")
 	bindHost := os.Getenv("OPTIMUS_BIND_HOST")
+	dbURI := os.Getenv("OPTIMUS_DB_URI")
 	if bindHost == "" {
 		bindHost = ":8000"
 	}
@@ -65,8 +66,13 @@ func main() {
 		database   *database.Database
 		httpServer *http.Server
 	}
-
+	dbClient, err := database.NewDbConnection(dbURI)
+	// TODO: make the API wait for the DB connection and not fail.
+	if err != nil {
+		logrus.Fatalf("An error occured while connecting to the database")
+	}
 	newApp := optimus{
+		database: dbClient,
 		httpServer: &http.Server{
 			Handler:      router,
 			Addr:         bindHost,

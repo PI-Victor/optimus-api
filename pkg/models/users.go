@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type Users struct {
+type User struct {
 	gorm.Model
+	Username string
 }
